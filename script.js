@@ -85,21 +85,18 @@ function playerTurn(){
  */
 
 function CPUTurn(){
-    alert(count)
     switch (count){
         case 20:
         case 19:
-            alert("hi, 19 or 20")
             turn = 1;
             break;
         case 18:
-            alert("hi, 18")
             turn = 2;
+            break;
         case 17:
-            alert("hi, 17")
             turn = 3;
+            break;
         default:
-            alert("hi, not 20, 19, 18, or 17")
             if (trainer == true){
                 turn = 4 - count % 4
             }

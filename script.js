@@ -1,109 +1,85 @@
-/* Nim Trainer by Yakov Would
-Chart Being Utilized: https://lucid.app/lucidchart/483f701d-ec02-406b-8970-7f9253ecd4e8 */
-
-// Global
-var count = 0;
-var trainer = false;
+/* Nim Trainer by Jacob
+ * based on this flowchart:
+ * https://lucid.app/lucidchart/2018baaf-4c26-4a76-a0d5-93c97f444425/view
+ */
 
 /** 
- * Main, calls the other functions.  * 
- * @param none
+ * main  
+ * Handles new Nim games with gametype choice simple or trainer and a play again option. 
+ * @param none 
  * @return none
  */
 
+// global variables
+var trainer = false;
+var count = 0;
+var turn = 0;
+
+/* Main */
 function main(){
     let again = false;
-    alert("Trainer - Always wins to help the user detect a pattern and get better at beating simple.\nSimple - Truly random Nim game, use your skills that you've learnt from versing the Trainer.")
-    trainer = confirm("Now, which will it be?\nSelect OK for Trainer\nSelect Cancel for Simple.")
+    trainer = confirm("Would you like to use trainer mode?")
     playNim();
-    count = 0;
-    again = confirm("Would you like to play again?")
+    again = confirm("Play again?");
     if (again == true) main();
-    // else alert("You've played a total of " + plays + " times, with a total of " + wins + " wins and " + losses + " losses with a " + WLR + "WLR and a " + wr + "% Win Rate.")
 }
 
 /** 
- * playNim, Runs nim with player first and specifies the winner.  * 
- * @param none
+ * playNim 
+ * plays a game with user first and computer second. Winner declared in an alert box. 
+ * @param none 
  * @return none
  */
 
+/* playNim */
 function playNim(){
-    if (trainer == false){ 
-        var whoFirst = Math.floor(Math.random()*2);
-        if (whoFirst == 1){
-            alert("You get to go first!")
-            playerTurn();
-        }
-        else {
-            alert("The computer goes first.")
-            CPUTurn();
-        }
-    }
-    else var whoFirst = playerTurn();
+    // alert("Playing Nim!")
+    count = 0;
     while (count < 21){
-        if (count < 21) {
-            if (whoFirst == 1) CPUTurn();
-            else playerTurn();
-        }
-        if (count < 21) {
-            if (whoFirst == 1) playerTurn();
-            else CPUTurn();
+        userTurn();
+        if (count > 20) alert("You lose!");
+        else{
+            cpuTurn();
+            if (count > 20) alert("You win!");
         }
     }
-    if (whoFirst == 1){
-        if (count > 20) alert("You won!");
-        else alert("You lost...")
+}
+
+/** 
+ * userTurn  
+ * User enters a turn. Validation against cheating handled by recursion.
+ * @param none 
+ * @return none
+ */
+function userTurn(){
+    // count += 3;
+    // alert("You counted 3, count is now " + count + ".");
+    turn = parseInt(prompt("Pick a number, 1-3."));
+    if (turn < 1 || turn > 3){
+        alert("Your input is invalid!")
+        userTurn();
     }
     else{
-        if (count > 20) alert("You lost...");
-        else alert("You won!")
-    }
-}
-/** 
- * playerTurn, does player turn, with a recursive anticheat.
- * @param none
- * @return none
- */
-
-function playerTurn(){
-    let turn = parseInt(prompt("Input a number, 1-3."))
-    if (turn >= 1 && turn < 4) {
         count += turn;
-        alert("The count is now " + count + ".")
-    }
-    else { 
-        alert("Invalid input, try again.")
-        playerTurn();
+        alert("Count is now " + count + ".");
     }
 }
 
 /** 
- * CPUTurn, does pc turn without intentional loss (turns vary based on modes) * 
- * @param none
+ * cpuTurn 
+ * Generate computer's turn without losing on purpose.  Different turns if trainer or simple.  
+ * @param none 
  * @return none
  */
-
-function CPUTurn(){
-    switch (count){
-        case 20:
-        case 19:
-            turn = 1;
-            break;
-        case 18:
-            turn = 2;
-            break;
-        case 17:
-            turn = 3;
-            break;
-        default:
-            if (trainer == true){
-                turn = 4 - count % 4
-            }
-            else {
-                turn = Math.floor(Math.random()+1*3)
-            }
-    }
+function cpuTurn(){
+    // count += 3;
+    if (count == 17) turn = 3;
+    else if (count == 18) turn = 2;
+    else if (count > 18) turn = 1;
+    else if (trainer == true) turn = 4 - count % 4;
+    else turn = Math.floor(Math.random()*3)+1;
     count += turn;
-    alert("I counted " + turn + ", the count is now " + count + ".")
+    alert("I counted " + turn + ", count is now " + count + ".");
 }
+
+
